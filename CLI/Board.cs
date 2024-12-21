@@ -18,6 +18,12 @@
       return true;
     }
 
+    public void RemovePieceAt(Coordinate position) {
+      if (GetPieceAt(position) != null) {
+        Grid[position.X, position.Y] = null;
+      }
+    }
+
     public void PopulateBoard(string template) {
     }
   }

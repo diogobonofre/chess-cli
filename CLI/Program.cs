@@ -53,9 +53,52 @@ namespace CLI {
         board.SetPieceAt(piece.Position, piece);
       }
 
+      Console.Clear();
       Console.WriteLine($"Player 1: {player.Name} - Color: {player.Color}");
       Console.WriteLine($"Player 2: {player2.Name} - Color: {player2.Color}");
       Console.WriteLine("For better visualization whites are dark cyan and blacks are dark yellow");
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+
+      board.RemovePieceAt(new Coordinate(6, 0));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+
+      var rook = board.GetPieceAt(new Coordinate(7, 0));
+      if (rook == null) {
+        return;
+      }
+      Move.MovePieceTo(board, rook, new Coordinate(1, 0));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+      Move.MovePieceTo(board, rook, new Coordinate(1, 1));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+      Move.MovePieceTo(board, rook, new Coordinate(1, 2));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+      Move.MovePieceTo(board, rook, new Coordinate(1, 3));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+      Move.MovePieceTo(board, rook, new Coordinate(1, 4));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+      Move.MovePieceTo(board, rook, new Coordinate(1, 5));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+      Move.MovePieceTo(board, rook, new Coordinate(1, 6));
+      UI.ShowBoard(board);
+      Thread.Sleep(1000);
+      Console.Clear();
+      Move.MovePieceTo(board, rook, new Coordinate(1, 7));
       UI.ShowBoard(board);
     }
   }
