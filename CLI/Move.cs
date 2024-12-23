@@ -1,10 +1,15 @@
 ﻿namespace CLI {
-  internal class Move {
-    public static void MovePieceTo(Board board, Piece piece, Coordinate newPosition) {
+  public static class Move {
+    public static void MovePieceTo(Board board, Player player, Piece piece, Coordinate newPosition) {
+      if (piece.Color != player.Color) {
+        Console.WriteLine("You can't move an enemy piece.");
+        return;
+      }
       CheckMovementValidity(piece, newPosition);
-      var tile = board.GetPieceAt(newPosition);
-      if (tile != null) {
-        Console.WriteLine($"Killed {tile.Sprite}");
+      var possiblePiece = board.GetPieceAt(newPosition);
+      if (possiblePiece != null) {
+        Console.WriteLine($"Killed {possiblePiece.Sprite}");
+        player.CapturedPieces.Add(possiblePiece);
         board.RemovePieceAt(newPosition);
       }
       board.RemovePieceAt(piece.Position);
