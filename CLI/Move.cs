@@ -18,10 +18,7 @@
     }
 
     public static bool CheckMovementValidity(Piece piece, Coordinate position) {
-      if (position.X > 7 || position.Y > 7 || position.X < 0 || position.Y < 0) {
-        return false;
-      }
-      return true;
+      return position.X <= 7 && position.Y <= 7 && position.X >= 0 && position.Y >= 0;
     }
   }
 }
