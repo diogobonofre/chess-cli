@@ -24,7 +24,10 @@
       }
     }
 
-    public void PopulateBoard(string template) {
+    public void PlacePlayerPieces(Player player) {
+      foreach (var piece in player.Pieces) {
+        SetPieceAt(piece.Position, piece);
+      }
     }
   }
 }
