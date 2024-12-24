@@ -2,8 +2,10 @@
   internal static class UI {
     /// <summary>
     /// Receive a board and print it to the command-line.
+    /// If <code>piece</code> is not null, will show all possible movements and captures for the given piece.
     /// </summary>
     /// <param name="board"></param>
+    /// <param name="piece"></param>
     public static void ShowBoard(Board board, Piece? piece = null) {
       for (int i = 7; i >= 0; i--) {
         Console.Write(i + 1);
@@ -13,6 +15,9 @@
             : ConsoleColor.Black;
           if (piece != null) IsPossibleMoveOrCapture(board, piece, new Coordinate(i, j));
           var tile = board.Grid[i, j];
+          if (tile?.Position.X == piece?.Position.X && tile?.Position.Y == piece?.Position.Y) {
+            Console.BackgroundColor = ConsoleColor.DarkBlue;
+          }
           if (tile != null) {
             Console.ForegroundColor = tile.Color == Color.White
               ? ConsoleColor.DarkCyan
@@ -45,6 +50,11 @@
         ? ConsoleColor.Green
         : ConsoleColor.DarkGreen;
         var pieceAtPosition = board.GetPieceAt(position);
+        if (pieceAtPosition != null && pieceAtPosition != piece && pieceAtPosition.Color == piece.Color) {
+          Console.BackgroundColor = Console.BackgroundColor == ConsoleColor.Green
+          ? ConsoleColor.White
+          : ConsoleColor.Black;
+        }
         if (pieceAtPosition != null && pieceAtPosition != piece && pieceAtPosition.Color != piece.Color) {
           Console.BackgroundColor = Console.BackgroundColor == ConsoleColor.White
           ? ConsoleColor.Red
