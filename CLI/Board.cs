@@ -10,18 +10,13 @@
       return Grid[position.X, position.Y];
     }
 
-    public bool SetPieceAt(Coordinate position, Piece piece) {
-      if (GetPieceAt(position) != null) {
-        return false;
-      }
+    public void SetPieceAt(Coordinate position, Piece piece) {
+      if (GetPieceAt(position) != null) return;
       Grid[position.X, position.Y] = piece;
-      return true;
     }
 
     public void RemovePieceAt(Coordinate position) {
-      if (GetPieceAt(position) != null) {
-        Grid[position.X, position.Y] = null;
-      }
+      if (GetPieceAt(position) != null) Grid[position.X, position.Y] = null;
     }
 
     public void PlacePlayerPieces(Player player) {
