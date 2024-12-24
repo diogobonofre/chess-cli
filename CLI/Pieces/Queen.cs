@@ -6,7 +6,14 @@ namespace CLI.Pieces {
     }
 
     public override List<Coordinate> GetPossibleMoves(Board board) {
-      throw new NotImplementedException();
+      var possibleMoves = new List<Coordinate>();
+      var rook = new Rook(Position, Color);
+      var bishop = new Bishop(Position, Color);
+
+      possibleMoves.AddRange(rook.GetPossibleMoves(board));
+      possibleMoves.AddRange(bishop.GetPossibleMoves(board));
+
+      return possibleMoves;
     }
   }
 }
