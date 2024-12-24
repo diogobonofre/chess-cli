@@ -13,12 +13,6 @@ namespace CLI {
       Players = players;
     }
 
-    public void RefreshScreen() {
-      Console.Clear();
-      UI.PlayersStatus(Players);
-      UI.ShowBoard(Board);
-    }
-
     public void GivePlayerPieces() {
       foreach (var p in Players) {
         if (p.Color == Color.White) {
