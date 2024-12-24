@@ -1,90 +1,81 @@
-﻿namespace CLI {
+﻿using CLI.Pieces;
+
+namespace CLI {
   internal static class Program {
     public static void Main() {
       var board = new Board();
-
       var player = new Player(Color.White, "Diogo");
-      var player2 = new Player(Color.Black, "Bruno");
 
-      var gameController = new GameController(board: board, players: [player, player2]);
+      var rook = new Rook(new Coordinate(2, 6), Color.White);
+      board.SetPieceAt(rook.Position, rook);
 
-      gameController.GivePlayerPieces();
+      var whiteBishop = new Bishop(new Coordinate(5, 7), Color.White);
+      board.SetPieceAt(whiteBishop.Position, whiteBishop);
 
-      board.PlacePlayerPieces(player);
-      board.PlacePlayerPieces(player2);
+      var blackBishop = new Bishop(new Coordinate(5, 5), Color.Black);
+      board.SetPieceAt(blackBishop.Position, blackBishop);
 
-      gameController.RefreshScreen();
+      var whitePawn = new Pawn(new Coordinate(2, 0), Color.White);
+      board.SetPieceAt(whitePawn.Position, whitePawn);
 
-      board.RemovePieceAt(new Coordinate(6, 0));
-      gameController.RefreshScreen();
+      var blackPawn = new Pawn(new Coordinate(6, 6), Color.Black);
+      board.SetPieceAt(blackPawn.Position, blackPawn);
 
-      var rook = board.GetPieceAt(new Coordinate(7, 0));
-      if (rook == null) return;
+      var queen = new Queen(new Coordinate(3, 4), Color.Black);
+      board.SetPieceAt(queen.Position, queen);
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 0));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      var blackKnight = new Knight(new Coordinate(7, 7), Color.Black);
+      board.SetPieceAt(blackKnight.Position, blackKnight);
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 1));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      var whiteKnight = new Knight(new Coordinate(4, 4), Color.White);
+      board.SetPieceAt(whiteKnight.Position, whiteKnight);
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 2));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      var whiteKing = new King(new Coordinate(3, 3), Color.White);
+      board.SetPieceAt(whiteKing.Position, whiteKing);
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 3));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      var blackKing = new King(new Coordinate(3, 6), Color.Black);
+      board.SetPieceAt(blackKing.Position, blackKing);
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 4));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 5));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, whitePawn);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 6));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, blackPawn);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(1, 7));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, rook);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 7));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, whiteBishop);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 6));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, blackBishop);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 5));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, whiteKnight);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 4));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, blackKnight);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 3));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, queen);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 2));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, whiteKing);
+      Thread.Sleep(2000);
+      Console.Clear();
 
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 1));
-      gameController.RefreshScreen();
-      Thread.Sleep(1000);
-
-      Move.MovePieceTo(board, player2, rook, new Coordinate(0, 0));
-      gameController.RefreshScreen();
-      board.PlacePlayerPieces(player);
-      Thread.Sleep(1000);
+      UI.ShowBoard(board, blackKing);
+      Thread.Sleep(2000);
     }
   }
 }
