@@ -2,60 +2,76 @@
 
 namespace CLI {
   public class GameController {
-    public List<Player> Players { get; private set; } = [];
-    public Color Turn { get; set; } = Color.White;
-    public Board Board { get; set; } = new Board();
+    private Player _whitePlayer { get; set; }
+    private Player _blackPlayer { get; set; }
+    public Board Board { get; private set; } = new Board();
+    private Color _turn { get; set; } = Color.White;
 
-    public GameController() { }
-
-    public GameController(Board board, List<Player> players) {
-      Board = board;
-      Players = players;
+    public GameController(Player whitePlayer, Player blackPlayer) {
+      _whitePlayer = whitePlayer;
+      _blackPlayer = blackPlayer;
     }
 
-    public void GivePlayerPieces() {
-      foreach (var p in Players) {
-        if (p.Color == Color.White) {
-          p.Pieces = [
-            new Rook(new Coordinate(0, 0), Color.White),
-            new Knight(new Coordinate(0, 1), Color.White),
-            new Bishop(new Coordinate(0, 2), Color.White),
-            new King(new Coordinate(0, 3), Color.White),
-            new Queen(new Coordinate(0, 4), Color.White),
-            new Bishop(new Coordinate(0, 5), Color.White),
-            new Knight(new Coordinate(0, 6), Color.White),
-            new Rook(new Coordinate(0, 7), Color.White),
-            new Pawn(new Coordinate(1, 0), Color.White),
-            new Pawn(new Coordinate(1, 1), Color.White),
-            new Pawn(new Coordinate(1, 2), Color.White),
-            new Pawn(new Coordinate(1, 3), Color.White),
-            new Pawn(new Coordinate(1, 4), Color.White),
-            new Pawn(new Coordinate(1, 5), Color.White),
-            new Pawn(new Coordinate(1, 6), Color.White),
-            new Pawn(new Coordinate(1, 7), Color.White)
-          ];
-        }
-        else {
-          p.Pieces = [
-            new Rook(new Coordinate(7, 0), Color.Black),
-            new Knight(new Coordinate(7, 1), Color.Black),
-            new Bishop(new Coordinate(7, 2), Color.Black),
-            new King(new Coordinate(7, 3), Color.Black),
-            new Queen(new Coordinate(7, 4), Color.Black),
-            new Bishop(new Coordinate(7, 5), Color.Black),
-            new Knight(new Coordinate(7, 6), Color.Black),
-            new Rook(new Coordinate(7, 7), Color.Black),
-            new Pawn(new Coordinate(6, 0), Color.Black),
-            new Pawn(new Coordinate(6, 1), Color.Black),
-            new Pawn(new Coordinate(6, 2), Color.Black),
-            new Pawn(new Coordinate(6, 3), Color.Black),
-            new Pawn(new Coordinate(6, 4), Color.Black),
-            new Pawn(new Coordinate(6, 5), Color.Black),
-            new Pawn(new Coordinate(6, 6), Color.Black),
-            new Pawn(new Coordinate(6, 7), Color.Black),
-          ];
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void SetupGame() {
+      AssignPieces(_whitePlayer);
+      AssignPieces(_blackPlayer);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    private void AssignPieces(Player player) {
+      int pawnRow = player.Color == Color.White ? 1 : 6;
+      int backRow = player.Color == Color.White ? 0 : 7;
+      Piece piece;
+
+      // Pawns
+      for (int i = 0; i < 8; i++) {
+        piece = new Pawn(new Coordinate(pawnRow, i), player.Color);
+        Board.SetPieceAt(piece.Position, piece);
+        player.Pieces.Add(piece);
       }
+
+      // Rooks
+      piece = new Rook(new Coordinate(backRow, 0), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
+
+      piece = new Rook(new Coordinate(backRow, 7), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
+
+      // Knights
+      piece = new Knight(new Coordinate(backRow, 1), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
+
+      piece = new Knight(new Coordinate(backRow, 6), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
+
+      // Bishops
+      piece = new Bishop(new Coordinate(backRow, 2), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
+
+      piece = new Bishop(new Coordinate(backRow, 5), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
+
+      // Queen
+      piece = new Queen(new Coordinate(backRow, 3), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
+
+      // King
+      piece = new King(new Coordinate(backRow, 4), player.Color);
+      Board.SetPieceAt(piece.Position, piece);
+      player.Pieces.Add(piece);
     }
   }
 }
