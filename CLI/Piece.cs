@@ -28,5 +28,9 @@
     public bool IsMoveValid(Board board, Coordinate position) {
       return GetPossibleMoves(board).Contains(position);
     }
+
+    protected static bool IsWithinBounds(int x, int y) {
+      return x >= 0 && x < 8 && y >= 0 && y < 8;
+    }
   }
 }
