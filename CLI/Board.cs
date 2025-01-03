@@ -11,7 +11,10 @@
     }
 
     public void SetPieceAt(Coordinate position, Piece piece) {
-      if (GetPieceAt(position) != null) return;
+      if (GetPieceAt(position) != null) {
+        Console.WriteLine($"The coordinate ({position.X}, {position.Y}) already has a piece.");
+        return;
+      }
       Grid[position.X, position.Y] = piece;
     }
 
