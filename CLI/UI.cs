@@ -1,66 +1,80 @@
 ﻿namespace CLI {
   internal static class UI {
     /// <summary>
-    /// Receive a board and print it to the command-line.
-    /// If <code>piece</code> is not null, will show all possible movements and captures for the given piece.
+    /// Receive a game controller and print it's board to the command-line.
     /// </summary>
-    /// <param name="board"></param>
+    /// <param name="controller"></param>
     /// <param name="piece"></param>
-    public static void ShowBoard(Board board, Piece? piece = null) {
-      for (int i = 7; i >= 0; i--) {
-        Console.Write(i + 1);
-        for (int j = 7; j >= 0; j--) {
-          Console.BackgroundColor = i % 2 == 0 && j % 2 == 0 || i % 2 == 1 && j % 2 == 1
-            ? ConsoleColor.White
-            : ConsoleColor.Black;
-          if (piece != null) IsPossibleMoveOrCapture(board, piece, new Coordinate(i, j));
-          var tile = board.Grid[i, j];
-          if (tile?.Position.X == piece?.Position.X && tile?.Position.Y == piece?.Position.Y) {
-            Console.BackgroundColor = ConsoleColor.DarkBlue;
-          }
-          if (tile != null) {
-            Console.ForegroundColor = tile.Color == Color.White
-              ? ConsoleColor.DarkCyan
-              : ConsoleColor.DarkYellow;
-            Console.Write($" {tile.Sprite} ");
-          }
-
-          else if (i % 2 == 0 && j % 2 == 0 || i % 2 == 1 && j % 2 == 1) {
-            Console.Write("   ");
-          }
-          else {
-            Console.Write("   ");
-          }
-          Console.ResetColor();
+    public static void ShowBoard(GameController controller, Piece? piece = null) {
+      for (int x = 0; x < 8; x++) {
+        Console.Write(1 + x);
+        for (int y = 0; y < 8; y++) {
+          var coordinate = new Coordinate(x, y);
+          SetTileColor(controller, piece, coordinate);
+          PrintTile(controller, coordinate);
         }
         Console.WriteLine();
       }
-      Console.WriteLine("  A  B  C  D  E  F  G  H ");
+      for (int i = 0; i < 8; i++) Console.Write(string.Format("  {0}", (char)('A' + i)));
+      Console.WriteLine();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="coordinate"></param>
+    private static void PrintTile(GameController controller, Coordinate coordinate) {
+      var piece = controller.Board.GetPieceAt(coordinate);
+
+      if (piece != null) {
+        Console.ForegroundColor = piece.Color == Color.White ? ConsoleColor.Cyan : ConsoleColor.Magenta;
+        Console.Write($" {piece.Sprite} ");
+      } else {
+        Console.Write("   ");
+      }
+
+      Console.ResetColor();
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="piece"></param>
+    /// <param name="coordinate"></param>
+    private static void SetTileColor(GameController controller, Piece? piece, Coordinate coordinate) {
+      Console.BackgroundColor = (coordinate.X % 2 == 0 && coordinate.Y % 2 == 0) || (coordinate.X % 2 == 1 && coordinate.Y % 2 == 1)
+        ? ConsoleColor.White
+        : ConsoleColor.Black;
+
+      if (piece != null) {
+        int moveCaptureStatus = IsPossibleMoveOrCapture(controller, piece, coordinate);
+        // Console.Write(moveCaptureStatus);
+        if (moveCaptureStatus == 1) Console.BackgroundColor = ConsoleColor.Green;
+        if (moveCaptureStatus == 2) Console.BackgroundColor = ConsoleColor.Red;
+      }
     }
 
     /// <summary>
     /// Check if the current position at the given board is a possible move or capture for the given piece.
     /// </summary>
-    /// <param name="board"></param>
-    /// <param name="piece"></param>
-    /// <param name="position"></param>
-    private static void IsPossibleMoveOrCapture(Board board, Piece piece, Coordinate position) {
-      if (piece.GetPossibleMoves(board).Contains(position)) {
-        Console.BackgroundColor = Console.BackgroundColor == ConsoleColor.White
-        ? ConsoleColor.Green
-        : ConsoleColor.DarkGreen;
-        var pieceAtPosition = board.GetPieceAt(position);
-        if (pieceAtPosition != null && pieceAtPosition != piece && pieceAtPosition.Color == piece.Color) {
-          Console.BackgroundColor = Console.BackgroundColor == ConsoleColor.Green
-          ? ConsoleColor.White
-          : ConsoleColor.Black;
-        }
-        if (pieceAtPosition != null && pieceAtPosition != piece && pieceAtPosition.Color != piece.Color) {
-          Console.BackgroundColor = Console.BackgroundColor == ConsoleColor.White
-          ? ConsoleColor.Red
-          : ConsoleColor.DarkRed;
-        }
-      }
+    /// <returns>
+    /// 1: Coordinate is a possible move
+    /// 2: Coordinate is a possible capture
+    /// 0: Coordinate is not a possible move or capture
+    /// </returns>
+    private static int IsPossibleMoveOrCapture(GameController controller, Piece? piece, Coordinate coordinate) {
+      if (piece == null) throw new ArgumentNullException(nameof(piece), message: "piece can't be null.");
+
+      var coordinatePiece = controller.Board.GetPieceAt(coordinate);
+      var possibleMoves = piece.GetPossibleMoves(controller.Board);
+
+      bool isCoordinatePossibleMove = possibleMoves.Any(c => c == coordinate);
+
+      if (isCoordinatePossibleMove && coordinatePiece == null) return 1;
+      if (isCoordinatePossibleMove && coordinatePiece != null && piece.Color != coordinatePiece.Color) return 2;
+      return 0;
     }
 
     /// <summary>
@@ -73,14 +87,46 @@
         foreach (var piece in player.CapturedPieces) {
           if (player.Color == Color.White) {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-          }
-          else {
+          } else {
             Console.ForegroundColor = ConsoleColor.DarkCyan;
           }
           Console.Write($"{piece.Sprite} ");
         }
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine();
+      }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="controller"></param>
+    /// <param name="player"></param>
+    public static void Move(GameController controller, Player player) {
+      if (player.Pieces.Count <= 0) {
+        Console.WriteLine("The current player does not have any pieces");
+        return;
+      }
+
+      var pieces = player.Pieces;
+      var index = 0;
+
+      while (true) {
+        ShowBoard(controller);
+
+        var key = Console.ReadKey();
+        Console.Clear();
+
+        if (key.KeyChar == 'n') {
+          if (index < pieces.Count - 1) {
+            index++;
+          } else {
+            index = 0;
+          }
+        }
+        if (key.KeyChar == 'x') {
+          break;
+        }
       }
     }
   }
