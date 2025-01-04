@@ -2,22 +2,30 @@
 
 namespace CLI {
   public class GameController {
-    private Player _whitePlayer { get; set; }
-    private Player _blackPlayer { get; set; }
+    public Player WhitePlayer { get; set; }
+    public Player BlackPlayer { get; set; }
     public Board Board { get; private set; } = new Board();
-    private Color _turn { get; set; } = Color.White;
+    public Player Turn { get; private set; }
 
     public GameController(Player whitePlayer, Player blackPlayer) {
-      _whitePlayer = whitePlayer;
-      _blackPlayer = blackPlayer;
+      WhitePlayer = whitePlayer;
+      BlackPlayer = blackPlayer;
+      Turn = whitePlayer;
     }
 
     /// <summary>
-    /// 
+    /// Give and position black and white player initial pieces.
     /// </summary>
     public void SetupGame() {
-      AssignPieces(_whitePlayer);
-      AssignPieces(_blackPlayer);
+      AssignPieces(WhitePlayer);
+      AssignPieces(BlackPlayer);
+    }
+
+    /// <summary>
+    /// Alternate turn between players.
+    /// </summary>
+    public void ChangeTurn() {
+      Turn = Turn.Color == Color.White ? BlackPlayer : WhitePlayer;
     }
 
     /// <summary>
