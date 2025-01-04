@@ -50,9 +50,9 @@
 
       if (piece != null) {
         int moveCaptureStatus = IsPossibleMoveOrCapture(controller, piece, coordinate);
-        // Console.Write(moveCaptureStatus);
         if (moveCaptureStatus == 1) Console.BackgroundColor = ConsoleColor.Green;
         if (moveCaptureStatus == 2) Console.BackgroundColor = ConsoleColor.Red;
+        if (coordinate == piece.Position) Console.BackgroundColor = ConsoleColor.Blue;
       }
     }
 
@@ -102,7 +102,7 @@
     /// </summary>
     /// <param name="controller"></param>
     /// <param name="player"></param>
-    public static void Move(GameController controller, Player player) {
+    public static void ShowMoves(GameController controller, Player player) {
       if (player.Pieces.Count <= 0) {
         Console.WriteLine("The current player does not have any pieces");
         return;
@@ -112,21 +112,14 @@
       var index = 0;
 
       while (true) {
-        ShowBoard(controller);
+        Console.Clear();
+        ShowBoard(controller, pieces[index]);
 
         var key = Console.ReadKey();
-        Console.Clear();
 
-        if (key.KeyChar == 'n') {
-          if (index < pieces.Count - 1) {
-            index++;
-          } else {
-            index = 0;
-          }
-        }
-        if (key.KeyChar == 'x') {
-          break;
-        }
+        if (key.KeyChar == 'n') index = index < pieces.Count - 1 ? index + 1 : 0;
+        if (key.KeyChar == 'p') index = index > 0 ? index - 1 : pieces.Count - 1;
+        if (key.KeyChar == 'x') break;
       }
     }
   }
