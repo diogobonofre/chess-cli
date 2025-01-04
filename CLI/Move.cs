@@ -11,27 +11,32 @@
     /// <param name="player"></param>
     /// <param name="piece"></param>
     /// <param name="newPosition"></param>
-    public static void MovePieceTo(Board board, Player player, Piece piece, Coordinate newPosition) {
-      if (piece.Color != player.Color) {
+    public static void MovePieceTo(GameController controller, Piece piece, Coordinate newPosition) {
+      var player = controller.Turn;
+
+      if (player.Color != piece.Color) {
         Console.WriteLine("You can't move an enemy piece.");
         return;
       }
 
-      if (!piece.GetPossibleMoves(board).Contains(newPosition)) {
+      if (!piece.GetPossibleMoves(controller).Contains(newPosition)) {
         Console.WriteLine("The new position isn't reachable with any valid move.");
         return;
       }
 
-      var pieceAtTile = board.GetPieceAt(newPosition);
+      var pieceAtTile = controller.Board.GetPieceAt(newPosition);
       if (pieceAtTile != null) {
-        Console.WriteLine($"Killed {pieceAtTile.Sprite}");
+        var opponent = player.Color == Color.White ? controller.BlackPlayer : controller.WhitePlayer;
+        controller.Board.RemovePieceAt(newPosition);
+        opponent.Pieces.Remove(pieceAtTile);
         player.CapturedPieces.Add(pieceAtTile);
-        board.RemovePieceAt(newPosition);
       }
 
-      board.RemovePieceAt(piece.Position);
-      board.Grid[newPosition.X, newPosition.Y] = piece;
+      controller.Board.RemovePieceAt(piece.Position);
+      controller.Board.Grid[newPosition.X, newPosition.Y] = piece;
       piece.Position = newPosition;
+
+      controller.ChangeTurn();
     }
   }
 }
