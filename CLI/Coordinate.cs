@@ -29,7 +29,7 @@
     }
 
     public override string ToString() {
-      return $"{(char)('A' + X)}{Y + 1}";
+      return $"{(char)('A' + Y)}{X + 1}";
     }
 
     /// <summary>
