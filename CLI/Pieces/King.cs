@@ -5,7 +5,7 @@
     }
 
     // TODO: Refactor to reuse existing Bishop and Rook movement logic
-    public override List<Coordinate> GetPossibleMoves(Board board) {
+    public override List<Coordinate> GetPossibleMoves(GameController controller) {
       var possibleMoves = new List<Coordinate>();
 
       if (IsWithinBounds(Position.X + 1, Position.Y)) {

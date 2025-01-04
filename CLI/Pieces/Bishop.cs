@@ -4,7 +4,7 @@
       Sprite = '♝';
     }
 
-    public override List<Coordinate> GetPossibleMoves(Board board) {
+    public override List<Coordinate> GetPossibleMoves(GameController controller) {
       var possibleMoves = new List<Coordinate>();
 
       var topRight = false;
@@ -14,19 +14,19 @@
 
       for (int i = 1; i < 8; i++) {
         if (!topRight && IsWithinBounds(Position.X + i, Position.Y + i)) {
-          if (board.GetPieceAt(new Coordinate(Position.X + i, Position.Y + i)) != null) topRight = true;
+          if (controller.Board.GetPieceAt(new Coordinate(Position.X + i, Position.Y + i)) != null) topRight = true;
           possibleMoves.Add(new Coordinate(Position.X + i, Position.Y + i));
         }
         if (!topLeft && IsWithinBounds(Position.X + i, Position.Y - i)) {
-          if (board.GetPieceAt(new Coordinate(Position.X + i, Position.Y - i)) != null) topLeft = true;
+          if (controller.Board.GetPieceAt(new Coordinate(Position.X + i, Position.Y - i)) != null) topLeft = true;
           possibleMoves.Add(new Coordinate(Position.X + i, Position.Y - i));
         }
         if (!bottomRight && IsWithinBounds(Position.X - i, Position.Y + i)) {
-          if (board.GetPieceAt(new Coordinate(Position.X - i, Position.Y + i)) != null) bottomRight = true;
+          if (controller.Board.GetPieceAt(new Coordinate(Position.X - i, Position.Y + i)) != null) bottomRight = true;
           possibleMoves.Add(new Coordinate(Position.X - i, Position.Y + i));
         }
         if (!bottomLeft && IsWithinBounds(Position.X - i, Position.Y - i)) {
-          if (board.GetPieceAt(new Coordinate(Position.X - i, Position.Y - i)) != null) bottomLeft = true;
+          if (controller.Board.GetPieceAt(new Coordinate(Position.X - i, Position.Y - i)) != null) bottomLeft = true;
           possibleMoves.Add(new Coordinate(Position.X - i, Position.Y - i));
         }
       }

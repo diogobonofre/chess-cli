@@ -4,7 +4,7 @@
       Sprite = '♞';
     }
 
-    public override List<Coordinate> GetPossibleMoves(Board board) {
+    public override List<Coordinate> GetPossibleMoves(GameController controller) {
       var possibleMoves = new List<Coordinate>();
 
       if (IsWithinBounds(Position.X + 2, Position.Y + 1)) {

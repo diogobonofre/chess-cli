@@ -5,13 +5,13 @@ namespace CLI.Pieces {
       Sprite = '♛';
     }
 
-    public override List<Coordinate> GetPossibleMoves(Board board) {
+    public override List<Coordinate> GetPossibleMoves(GameController controller) {
       var possibleMoves = new List<Coordinate>();
       var rook = new Rook(Position, Color);
       var bishop = new Bishop(Position, Color);
 
-      possibleMoves.AddRange(rook.GetPossibleMoves(board));
-      possibleMoves.AddRange(bishop.GetPossibleMoves(board));
+      possibleMoves.AddRange(rook.GetPossibleMoves(controller));
+      possibleMoves.AddRange(bishop.GetPossibleMoves(controller));
 
       return possibleMoves;
     }
