@@ -7,8 +7,7 @@
     /// <summary>
     /// Check movement validity and move a piece from one tile to another.
     /// </summary>
-    /// <param name="board"></param>
-    /// <param name="player"></param>
+    /// <param name="controller"></param>
     /// <param name="piece"></param>
     /// <param name="newPosition"></param>
     public static void MovePieceTo(GameController controller, Piece piece, Coordinate newPosition) {

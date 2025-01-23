@@ -1,6 +1,7 @@
-﻿namespace CLI {
-  public enum Color {
+﻿namespace CLI;
+
+public enum Color
+{
     Black,
     White
-  }
 }
