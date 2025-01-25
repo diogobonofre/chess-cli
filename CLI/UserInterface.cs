@@ -37,10 +37,7 @@ internal static class UserInterface
             Console.ForegroundColor = piece.Color == Color.White ? ConsoleColor.Cyan : ConsoleColor.Magenta;
             Console.Write($" {piece.Sprite} ");
         }
-        else
-        {
-            Console.Write("   ");
-        }
+        else Console.Write("   ");
 
         Console.ResetColor();
     }
@@ -53,46 +50,28 @@ internal static class UserInterface
             : ConsoleColor.Black;
 
         if (piece == null) return;
-        
-        var moveCaptureStatus = IsPossibleMoveOrCapture(controller, piece, coordinate);
-        
+
+        var moveCaptureStatus = GameController.IsPossibleMoveOrCapture(controller, piece, coordinate);
+
         // TODO: Adapt to switch expression
         if (moveCaptureStatus == 1) Console.BackgroundColor = ConsoleColor.Green;
         if (moveCaptureStatus == 2) Console.BackgroundColor = ConsoleColor.Red;
         if (coordinate == piece.Position) Console.BackgroundColor = ConsoleColor.Blue;
     }
 
-    /// <summary>
-    /// Check if the current position at the given board is a possible move or capture for the given piece.
-    /// </summary>
-    /// <returns>
-    /// 1: Coordinate is a possible move
-    /// 2: Coordinate is a possible capture
-    /// 0: Coordinate is not a possible move or capture
-    /// </returns>
-    private static int IsPossibleMoveOrCapture(GameController controller, Piece? piece, Coordinate coordinate)
-    {
-        if (piece == null) throw new ArgumentNullException(nameof(piece), message: "piece can't be null.");
 
-        var coordinatePiece = controller.Board.GetPieceAt(coordinate);
-        var possibleMoves = piece.GetPossibleMoves(controller);
-
-        var isCoordinatePossibleMove = possibleMoves.Any(c => c == coordinate);
-
-        return isCoordinatePossibleMove switch
-        {
-            true when coordinatePiece == null => 1,
-            true when piece.Color != coordinatePiece.Color => 2,
-            _ => 0
-        };
-    }
 
     /// <summary>
     /// Receive a GameController and print the current state of captures of the game.
     /// </summary>
     /// <param name="controller"></param>
-    public static void ShowCaptures(GameController controller)
+    public static void ShowStatistics(GameController controller)
     {
+        Console.WriteLine($"{controller.WhitePlayer.Name}: ");
+        foreach (var piece in controller.WhitePlayer.CapturedPieces) Console.Write(piece.Sprite);
+
+        Console.WriteLine($"{controller.BlackPlayer.Name}: ");
+        foreach (var piece in controller.BlackPlayer.CapturedPieces) Console.Write(piece.Sprite);
     }
 
     public static void ShowMoves(GameController controller, Player player)
