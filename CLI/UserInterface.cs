@@ -2,6 +2,8 @@
 
 internal static class UserInterface
 {
+    private static bool _showDebugInfo = false;
+    
     /// <summary>
     /// Receive a game controller and print its board to the command-line.
     /// </summary>
@@ -107,10 +109,16 @@ internal static class UserInterface
         while (index != -1)
         {
             Console.Clear();
+            
+            if (_showDebugInfo) ShowDebugInfo(controller, pieces[index]);
+            
             ShowBoard(controller, pieces[index]);
 
             var key = Console.ReadKey();
-
+            
+            if (key.KeyChar == 'd') _showDebugInfo = !_showDebugInfo;
+            
+            // Maybe move keybindings responsibilities to main game loop?
             index = key.KeyChar switch
             {
                 'n' => index < pieces.Count - 1 ? index + 1 : 0,
@@ -119,5 +127,16 @@ internal static class UserInterface
                 _ => index
             };
         }
+    }
+
+    private static void ShowDebugInfo(GameController controller, Piece? piece = null)
+    {
+        ShowStatistics(controller);
+
+        Console.WriteLine($"Current turn: {controller.Turn.Name}");
+        if (piece == null) return;
+        
+        Console.WriteLine($"Piece Index: {GameController.GetPieceIndex(controller, piece)}");
+        Console.WriteLine($"Piece coordinate: {piece.Position.X}, {piece.Position.Y}");
     }
 }
