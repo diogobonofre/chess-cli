@@ -21,11 +21,8 @@ public class GameController(Player whitePlayer, Player blackPlayer)
     /// <summary>
     /// Alternate turn between players.
     /// </summary>
-    public void ChangeTurn()
-    {
-        Turn = Turn.Color == Color.White ? BlackPlayer : WhitePlayer;
-    }
-    
+    public void ChangeTurn() => Turn = Turn.Color == Color.White ? BlackPlayer : WhitePlayer;
+
     private void AssignPieces(Player player)
     {
         var pawnRow = player.Color == Color.White ? 1 : 6;
