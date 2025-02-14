@@ -2,10 +2,10 @@
 
 internal static class UserInterface
 {
-    private static bool _showDebugInfo = false;
-    
+    private static bool _showDebugInfo;
+
     /// <summary>
-    /// Receive a game controller and print its board to the command-line.
+    ///     Receive a game controller and print its board to the command-line.
     /// </summary>
     /// <param name="controller"></param>
     /// <param name="piece"></param>
@@ -37,7 +37,10 @@ internal static class UserInterface
             Console.ForegroundColor = piece.Color == Color.White ? ConsoleColor.Cyan : ConsoleColor.Magenta;
             Console.Write($" {piece.Sprite} ");
         }
-        else Console.Write("   ");
+        else
+        {
+            Console.Write("   ");
+        }
 
         Console.ResetColor();
     }
@@ -54,28 +57,29 @@ internal static class UserInterface
         var moveCaptureStatus = GameController.IsPossibleMoveOrCapture(controller, piece, coordinate);
 
         // TODO: Adapt to switch expression
+        // TODO: Adapt color based on the original color of the tile (dark color to black tiles and light color for white)
         if (moveCaptureStatus == 1) Console.BackgroundColor = ConsoleColor.Green;
         if (moveCaptureStatus == 2) Console.BackgroundColor = ConsoleColor.Red;
         if (coordinate == piece.Position) Console.BackgroundColor = ConsoleColor.Blue;
     }
 
-
-
     /// <summary>
-    /// Receive a GameController and print the current state of captures of the game.
+    ///     Receive a GameController and print the current state of captures of the game.
     /// </summary>
     /// <param name="controller"></param>
-    public static void ShowStatistics(GameController controller)
+    private static void ShowStatistics(GameController controller)
     {
-        Console.WriteLine($"{controller.WhitePlayer.Name}: ");
+        Console.WriteLine($"{controller.WhitePlayer.Name} (White): ");
         foreach (var piece in controller.WhitePlayer.CapturedPieces) Console.Write(piece.Sprite);
 
-        Console.WriteLine($"{controller.BlackPlayer.Name}: ");
+        Console.WriteLine($"{controller.BlackPlayer.Name} (Black): ");
         foreach (var piece in controller.BlackPlayer.CapturedPieces) Console.Write(piece.Sprite);
     }
 
     public static void ShowMoves(GameController controller, Player player)
     {
+        if (controller.Turn != player) controller.ChangeTurn();
+
         if (player.Pieces.Count <= 0)
         {
             Console.WriteLine("The current player does not have any pieces");
@@ -88,15 +92,15 @@ internal static class UserInterface
         while (index != -1)
         {
             Console.Clear();
-            
+
             if (_showDebugInfo) ShowDebugInfo(controller, pieces[index]);
-            
+
             ShowBoard(controller, pieces[index]);
 
             var key = Console.ReadKey();
-            
+
             if (key.KeyChar == 'd') _showDebugInfo = !_showDebugInfo;
-            
+
             // Maybe move keybindings responsibilities to main game loop?
             index = key.KeyChar switch
             {
@@ -111,11 +115,15 @@ internal static class UserInterface
     private static void ShowDebugInfo(GameController controller, Piece? piece = null)
     {
         ShowStatistics(controller);
-
         Console.WriteLine($"Current turn: {controller.Turn.Name}");
+
         if (piece == null) return;
-        
-        Console.WriteLine($"Piece Index: {GameController.GetPieceIndex(controller, piece)}");
+        Console.WriteLine($"Piece sprite: {piece.Sprite}");
+        Console.WriteLine($"Piece color: {piece.Color}");
+        Console.WriteLine($"Piece index: {GameController.GetPieceIndex(controller, piece)}");
         Console.WriteLine($"Piece coordinate: {piece.Position.X}, {piece.Position.Y}");
+        Console.Write("Piece possible moves coordinates: ");
+        foreach (var move in piece.GetPossibleMoves(controller)) Console.Write($"{move} ");
+        Console.WriteLine();
     }
 }

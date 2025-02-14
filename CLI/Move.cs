@@ -3,13 +3,13 @@
 namespace CLI;
 
 /// <summary>
-/// This class is responsible for managing and abstracting pieces movement 
-/// logic in the game board.
+///     This class is responsible for managing and abstracting pieces movement
+///     logic in the game board.
 /// </summary>
 public static class Move
 {
     /// <summary>
-    /// Check movement validity and move a piece from one tile to another.
+    ///     Check movement validity and move a piece from one tile to another.
     /// </summary>
     /// <param name="controller"></param>
     /// <param name="piece"></param>
@@ -43,23 +43,25 @@ public static class Move
         controller.Board.Grid[newPosition.X, newPosition.Y] = piece;
         piece.Position = newPosition;
 
-        if (piece is Pawn pawn)
-        {
-            pawn.HasMoved = true;
-            // add logic to change to transform pawns into another piece when reaching opponent side
-        }
-
-        if (piece is Rook rook)
-        {
-            rook.HasMoved = true;
-        }
+        // add logic to change to transform pawns into another piece when reaching opponent side
+        if (piece is Pawn pawn) pawn.HasMoved = true;
+        if (piece is Rook rook) rook.HasMoved = true;
 
         controller.ChangeTurn();
     }
 
-    public static void Castle(GameController controller, Rook rook) => throw new NotImplementedException();
+    public static void Castle(GameController controller, Rook rook)
+    {
+        throw new NotImplementedException();
+    }
 
-    public static void EnPassant(GameController controller, Pawn pawn) => throw new NotImplementedException();
-    
-    public static void PawnPromotion(GameController controller, Pawn pawn) => throw new NotImplementedException();
+    public static void EnPassant(GameController controller, Pawn pawn)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static void PawnPromotion(GameController controller, Pawn pawn)
+    {
+        throw new NotImplementedException();
+    }
 }

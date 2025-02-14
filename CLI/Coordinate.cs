@@ -5,15 +5,18 @@ public class Coordinate
     private int _x;
     private int _y;
 
+    public Coordinate(int x, int y)
+    {
+        X = x; // Attribution uses setter, so the validation is automatic
+        Y = y;
+    }
+
     public int X
     {
         get => _x;
         set
         {
-            if (value is < 0 or > 7)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "X must be between 0 and 7.");
-            }
+            if (value is < 0 or > 7) throw new ArgumentOutOfRangeException(nameof(value), "X must be between 0 and 7.");
 
             _x = value;
         }
@@ -24,26 +27,17 @@ public class Coordinate
         get => _y;
         set
         {
-            if (value is < 0 or > 7)
-            {
-                throw new ArgumentOutOfRangeException(nameof(value), "Y must be between 0 and 7.");
-            }
+            if (value is < 0 or > 7) throw new ArgumentOutOfRangeException(nameof(value), "Y must be between 0 and 7.");
 
             _y = value;
         }
-    }
-
-    public Coordinate(int x, int y)
-    {
-        X = x; // Attribution uses setter, so the validation is automatic
-        Y = y;
     }
 
     public override string ToString()
     {
         return $"{(char)('A' + Y)}{X + 1}";
     }
-        
+
     public static Coordinate FromString(string coordinate)
     {
         return new Coordinate(coordinate[0] - 'A', coordinate[1] - '1');
@@ -55,7 +49,10 @@ public class Coordinate
         return false;
     }
 
-    public override int GetHashCode() => HashCode.Combine(X, Y);
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(X, Y);
+    }
 
     public static bool operator ==(Coordinate? left, Coordinate? right)
     {

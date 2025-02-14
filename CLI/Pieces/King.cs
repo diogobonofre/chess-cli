@@ -7,49 +7,21 @@ public class King : Piece
         Sprite = '♚';
     }
 
-    // TODO: Refactor to reuse existing Bishop and Rook movement logic
     public override List<Coordinate> GetPossibleMoves(GameController controller)
     {
         var possibleMoves = new List<Coordinate>();
-
-        if (IsWithinBounds(Position.X + 1, Position.Y))
+        var directions = new (int dx, int dy)[]
         {
-            possibleMoves.Add(new Coordinate(Position.X + 1, Position.Y));
-        }
+            (1, 0), (0, -1), (-1, 0), (0, 1), // cardinal directions
+            (1, 1), (1, -1), (-1, -1), (-1, 1) // diagonal directions
+        };
 
-        if (IsWithinBounds(Position.X - 1, Position.Y))
+        foreach (var (dx, dy) in directions)
         {
-            possibleMoves.Add(new Coordinate(Position.X - 1, Position.Y));
-        }
+            var newX = Position.X + dx;
+            var newY = Position.Y + dy;
 
-        if (IsWithinBounds(Position.X, Position.Y + 1))
-        {
-            possibleMoves.Add(new Coordinate(Position.X, Position.Y + 1));
-        }
-
-        if (IsWithinBounds(Position.X, Position.Y - 1))
-        {
-            possibleMoves.Add(new Coordinate(Position.X, Position.Y - 1));
-        }
-
-        if (IsWithinBounds(Position.X + 1, Position.Y + 1))
-        {
-            possibleMoves.Add(new Coordinate(Position.X + 1, Position.Y + 1));
-        }
-
-        if (IsWithinBounds(Position.X + 1, Position.Y - 1))
-        {
-            possibleMoves.Add(new Coordinate(Position.X + 1, Position.Y - 1));
-        }
-
-        if (IsWithinBounds(Position.X - 1, Position.Y + 1))
-        {
-            possibleMoves.Add(new Coordinate(Position.X - 1, Position.Y + 1));
-        }
-
-        if (IsWithinBounds(Position.X - 1, Position.Y - 1))
-        {
-            possibleMoves.Add(new Coordinate(Position.X - 1, Position.Y - 1));
+            if (IsWithinBounds(newX, newY)) possibleMoves.Add(new Coordinate(newX, newY));
         }
 
         return possibleMoves;

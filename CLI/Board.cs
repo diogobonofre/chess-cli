@@ -2,7 +2,7 @@
 
 public class Board
 {
-    public Piece?[,] Grid { get; private set; } = new Piece[8, 8];
+    public Piece?[,] Grid { get; } = new Piece[8, 8];
 
     public Piece? GetPieceAt(Coordinate position)
     {
@@ -25,11 +25,9 @@ public class Board
         if (GetPieceAt(position) != null) Grid[position.X, position.Y] = null;
     }
 
+    // TODO: check possible dependencies and remove if its not necessary anymore
     public void PlacePlayerPieces(Player player)
     {
-        foreach (var piece in player.Pieces)
-        {
-            SetPieceAt(piece.Position, piece);
-        }
+        foreach (var piece in player.Pieces) SetPieceAt(piece.Position, piece);
     }
 }
